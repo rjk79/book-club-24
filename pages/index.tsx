@@ -6,27 +6,22 @@ import prisma from '../lib/prisma';
 import { GetStaticProps } from 'next';
 
 export const getStaticProps: GetStaticProps = async () => {
-  const feed = await prisma.post.findMany({
+  const feed = await prisma.order.findMany({
     // where: { published: true },
-    include: {
-      author: {
-        select: { name: true }, // returns specified fields
-      },
-    },
   });
   return {
     props: { feed },
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
     // - At most once every 10 seconds
-    revalidate: 10,
+    revalidate: 10
   };
 };
 
 function Home(props) {
   const router = useRouter();
   console.log(props.feed);
-  
+
   return (
     <div className="flex flex-col gap-2 items-start">
       <div>Home</div>

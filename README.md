@@ -10,4 +10,7 @@
 - Next.js
 - Overmind
 
-yarn dev => hot reload
+
+
+uses schema to generate client (generate new types) = `npx prisma generate`
+
