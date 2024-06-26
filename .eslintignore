@@ -1,0 +1,5 @@
+/cypress
+/.eslintrc.js
+/tailwind.config.js
+/pages/_app.tsx
+/postcss.config.js
