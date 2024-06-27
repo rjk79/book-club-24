@@ -20,7 +20,7 @@ function Home(props) {
             <BookHeart size={48} />
           </div>
           <div className="font-medium text-white">Share Your Favorite Books</div>
-          <Button variant="default">Get Started</Button>
+          <Button onClick={() => router.push('/books')} variant="default">Get Started</Button>
         </div>
         <div className="w-1/2 shadow-lg rounded-lg overflow-hidden">
           <img src="/books.jpg" className="h-full w-full object-cover" alt="logo" />

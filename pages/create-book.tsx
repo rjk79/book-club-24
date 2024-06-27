@@ -51,22 +51,7 @@ function Home(props) {
 
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
-      <div className="text-2xl font-bold text-gray-700">Book Club</div>
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuLink>Home</NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink>View Books</NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink>Add Book</NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-      <div></div>
-      <div className="capitalize text-lg font-medium">Add a book</div>
+      <div className="capitalize text-2xl font-medium">Add a book</div>
       <div className="flex flex-col gap-4">
         <Input className="capitalize" placeholder="title" />
         <Input className="capitalize" placeholder="notes" />

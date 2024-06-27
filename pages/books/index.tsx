@@ -68,7 +68,6 @@ function Home(props) {
   return (
     <div className="flex flex-col gap-2 items-start">
       <div className="mx-10">
-        <div className="text-2xl font-bold text-gray-700">Book Club</div>
 
         <div></div>
         <div className="capitalize text-2xl font-medium">Your Books</div>
