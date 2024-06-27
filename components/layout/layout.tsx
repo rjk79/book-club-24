@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 export default function Layout({ children }: { children: any }) {
   useEffect(() => {
-    document.title = 'Candidate Collective';
+    document.title = 'Book Club';
   }, []);
   return (
     <>

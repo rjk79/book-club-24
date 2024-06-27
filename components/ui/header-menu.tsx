@@ -15,8 +15,8 @@ import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 
 export const HeaderMenu = () => {
   return (
-    <div className="shadow-lg relative h-10 bg-purple-300 w-full justify-center flex">
-      <div className="flex items-center gap-x-2 absolute top-1.5 left-4 content-center text-xl font-medium text-gray-700">
+    <div className="shadow-lg relative h-12 bg-purple-300 w-full justify-center flex">
+      <div className="hidden sm:flex items-center gap-x-2 absolute top-2.5 left-4 content-center text-xl font-medium text-gray-700">
         Book Club
         <BookHeart size={25} />
       </div>
