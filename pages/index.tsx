@@ -1,62 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
-import prisma from '../lib/prisma';
+import prisma from 'lib/prisma';
 import { GetStaticProps } from 'next';
-
-export const getStaticProps: GetStaticProps = async () => {
-  const feed = await prisma.order.findMany({
-    // where: { published: true },
-  });
-  return {
-    props: { feed },
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every 10 seconds
-    revalidate: 10
-  };
-};
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { BookHeart } from 'lucide-react';
 
 function Home(props) {
   const router = useRouter();
-  console.log(props.feed);
 
   return (
-    <div className="flex flex-col gap-2 items-start">
-      <div>Home</div>
-      <div>
-        {props?.feed.map((post, index) => (
-          <div key={index}>{post.title}</div>
-        ))}
+    <div className="flex flex-col gap-2 items-center justify-center h-full">
+      <div className="bg-gradient-to-r from-fuchsia-500 to-violet-500 flex justify-evenly mx-auto h-full items-center gap-x-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-2 capitalize text-5xl font-bold text-white">
+            Book Club
+            <BookHeart size={48} />
+          </div>
+          <div className="font-medium text-white">Share Your Favorite Books</div>
+          <Button variant="default">Get Started</Button>
+        </div>
+        <div className="w-1/2 shadow-lg rounded-lg overflow-hidden">
+          <img src="/books.jpg" className="h-full w-full object-cover" alt="logo" />
+        </div>
       </div>
-      <Menu>
-        <Menu.Button className="border border-black">Pages</Menu.Button>
-        <Menu.Items className="bg-red-200">
-          <Menu.Item>
-            {({ active }) => (
-              <div
-                className={classNames('capitalize cursor-pointer', {
-                  'text-white': active
-                })}
-                onClick={() => router.push('/calculator')}>
-                calculator
-              </div>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <div
-                className={classNames('capitalize cursor-pointer', {
-                  'text-white': active
-                })}
-                onClick={() => router.push('/restaurants')}>
-                restaurants
-              </div>
-            )}
-          </Menu.Item>
-        </Menu.Items>
-      </Menu>
     </div>
   );
 }
