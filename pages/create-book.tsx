@@ -34,7 +34,7 @@ const FormSchema = z.object({
   rating: z.number()
 });
 
-function Home(props) {
+function CreateBook(props) {
   const [title, setTitle] = useState('');
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -65,7 +65,12 @@ function Home(props) {
   }
 
   async function onSubmit() {
-    console.log('submitting');
+    const res = await fetch(
+      `api/book`,
+      {
+        method: 'GET'
+      }
+    );
   }
 
   return (
@@ -82,7 +87,9 @@ function Home(props) {
           onChange={(e) => setTitle(e.target.value)}
         />
         {bookCoverResult.isFetching || bookCoverResult.isRefetching ? (
-          <LoadingSpinner className="m-auto mt-4" />
+          <div className='text-gray-500 flex flex-col items-center justify-center'>
+          <div>Loading book cover...</div>
+          <LoadingSpinner className="m-auto mt-4" /></div>
         ) : bookCoverResult.data ? (
           <div className="h-40 overflow-hidden border">
             <img src={bookCoverResult.data.url} className="object-contain h-full w-full" />
@@ -95,7 +102,7 @@ function Home(props) {
             <SelectValue placeholder="Rating" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="light">1 - I was offended</SelectItem>
+            <SelectItem value="light">1 - I was not impressed</SelectItem>
             <SelectItem value="light">2 - I did not enjoy it</SelectItem>
             <SelectItem value="dark">3 - It was okay</SelectItem>
             <SelectItem value="system">4 - I enjoyed it</SelectItem>
@@ -108,4 +115,4 @@ function Home(props) {
   );
 }
 
-export default Home;
+export default CreateBook;

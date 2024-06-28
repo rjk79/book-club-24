@@ -12,7 +12,7 @@ function Home(props) {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-2 items-center justify-center h-full">
+    <div className="w-fullflex flex-col gap-2 items-center justify-center h-full">
       <div className="flex-col sm:flex-row bg-gradient-to-r from-fuchsia-500 to-violet-500 flex justify-evenly mx-auto h-full items-center gap-x-4">
         <div className="flex flex-col gap-4">
           <div className="flex gap-2 capitalize text-5xl font-bold text-white">
