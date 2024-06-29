@@ -20,17 +20,33 @@ import { Star } from 'lucide-react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { toast } from '@/components/ui/use-toast';
 import Link from 'next/link';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import pluralize from 'pluralize';
 
 function Home(props) {
+  const [orderBy, setOrderBy] = useState('createdAt');
+  const [filterBy, setFilterBy] = useState(null);
   const router = useRouter();
 
   const booksResult = useQuery({
-    queryKey: ['readBooks'],
+    queryKey: ['readBooks', orderBy, filterBy],
     queryFn: () => readBooks()
   });
 
   async function readBooks() {
-    const res = await fetch('/api/books', {
+    const urlParams = new URLSearchParams();
+    urlParams.append('orderBy', orderBy);
+    if (filterBy) {
+      urlParams.append('filterBy', filterBy);
+    }
+
+    const res = await fetch(`/api/books?${urlParams}`, {
       method: 'GET'
     });
 
@@ -113,10 +129,41 @@ function Home(props) {
     </div>
   );
 
+  const orderByOptions = [
+    { value: 'createdAt', label: 'Created At' },
+    { value: 'rating', label: 'Rating' }
+  ];
+
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
       <div className="sm:mx-10">
-        <div className="capitalize text-2xl font-medium mb-4">Your Books</div>
+        <div className="capitalize text-2xl font-medium">Your Books</div>
+        <div className="flex gap-4 sticky top-0 bg-white items-center z-10 py-4">
+          <Select onValueChange={setOrderBy}>
+            <SelectTrigger className="sm:w-1/3">
+              <SelectValue placeholder="Order By" />
+            </SelectTrigger>
+            <SelectContent className="">
+              {orderByOptions.map((option: any, index: number) => (
+                <SelectItem key={index} value={option.value} className="capitalize">
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select onValueChange={setFilterBy}>
+            <SelectTrigger className="sm:w-1/3">
+              <SelectValue placeholder="Filter By" />
+            </SelectTrigger>
+            <SelectContent className="">
+              {[1, 2, 3, 4, 5].map((value: any, index: number) => (
+                <SelectItem key={index} value={value.toString()} className="capitalize">
+                  {value} {pluralize('star', value)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <div>{booksResult.data ? (booksResult.data.books.length ? books : zeroState) : loader}</div>
       </div>
     </div>
