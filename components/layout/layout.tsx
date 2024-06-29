@@ -1,6 +1,7 @@
 import { HeaderMenu } from '../ui/header-menu';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function Layout({ children }: { children: any }) {
   useEffect(() => {
@@ -10,6 +11,7 @@ export default function Layout({ children }: { children: any }) {
     <>
       <HeaderMenu />
       <main>{children}</main>
+      <Toaster />
     </>
   );
 }

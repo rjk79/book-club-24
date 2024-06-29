@@ -12,8 +12,11 @@ import {
 import { BookHeart } from 'lucide-react';
 import Link from 'next/link';
 import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
+import { useMediaQuery } from '@mantine/hooks';
 
 export const HeaderMenu = () => {
+  const isMobile = useMediaQuery('(max-width: 640px)');
+
   return (
     <div className="shadow-lg relative h-12 bg-purple-300 w-full justify-center flex">
       <div className="hidden sm:flex items-center gap-x-2 absolute top-2.5 left-4 content-center text-xl font-medium text-gray-700">
@@ -25,7 +28,9 @@ export const HeaderMenu = () => {
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link href="/" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                {isMobile ? <BookHeart size={25} /> : 'Home'}
+              </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
