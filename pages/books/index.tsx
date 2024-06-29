@@ -80,15 +80,15 @@ function Home(props) {
               <CardContent>
                 <img src={book.imageUrl} />
               </CardContent>
-              <CardContent>
+              <CardContent className="flex">
                 Rating:
                 <div className="flex">
-                  {Array.from({ length: 5 }, () => (
+                  {Array.from({ length: book.rating }, () => (
                     <Star fill="gold" strokeWidth={0} />
                   ))}
                 </div>
               </CardContent>
-              <CardContent>{book.notes}</CardContent>
+              <CardContent>{book.notes ? `Notes: ${book.notes}` : null}</CardContent>
             </Card>
           ))}
         </div>

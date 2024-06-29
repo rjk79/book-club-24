@@ -51,7 +51,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "reformat": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc && eslint --fix ."
+    "reformat": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc && eslint --fix .",
+    "postinstall": "prisma generate"
   },
   "eslintConfig": {
     "extends": [

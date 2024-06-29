@@ -38,7 +38,7 @@ export const HeaderMenu = () => {
           <NavigationMenuItem>
             <Link href="/create-book" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Edit Book List
+                Add to List
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
