@@ -25,55 +25,38 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import { useDebounce } from '../hooks/use-debounce';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { PencilIcon } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Star } from 'lucide-react';
 
 const FormSchema = z.object({
+  imageUrl: z.string().optional(),
   notes: z.string().max(50).optional(),
   rating: z.string().optional()
 });
 
-function CreateBook(props) {
-  const [title, setTitle] = useState('');
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      rating: '3'
-    }
-  });
+function EditBook(props) {
   const router = useRouter();
-  const debouncedValue = useDebounce(title, 500);
+  const { bookId } = router.query;
 
-  const bookCoverResult = useQuery({
-    queryKey: ['readBookCover', debouncedValue],
-    queryFn: () => readBookCover(),
-    enabled: !!debouncedValue
+  const bookResult = useQuery({
+    queryKey: ['readBook'],
+    queryFn: () => readBook(),
+    enabled: !!bookId
   });
 
-  async function readBookCover() {
-    const formatted = debouncedValue.split(' ').join('+');
-    const res = await fetch(
-      `https://bookcover.longitood.com/bookcover?book_title=${formatted}&author_name=%27`,
-      {
-        method: 'GET'
-      }
-    );
-
-    const jsonRes = await res.json();
-    return jsonRes;
-  }
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema)
+  });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = await fetch(`api/book`, {
-      method: 'POST',
+    const res = await fetch(`/api/book/${bookId}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        imageUrl: bookCoverResult.data.url,
         notes: data.notes,
         rating: parseInt(data.rating)
       })
@@ -86,29 +69,29 @@ function CreateBook(props) {
     router.push('/books');
   }
 
+  async function readBook() {
+    const res = await fetch(`/api/book/${bookId}`, {
+      method: 'GET'
+    });
+
+    const jsonRes = await res.json();
+
+    form.setValue('imageUrl', jsonRes.imageUrl);
+    form.setValue('notes', jsonRes.notes || '');
+    form.setValue('rating', jsonRes.rating.toString());
+
+    return;
+  }
+
   return (
     <div className="p-4 sm:p-10 flex flex-col gap-2 items-start">
       <div className="flex flex-col gap-4 sm:w-1/2 mx-auto">
-        <div className="capitalize text-2xl font-medium">Add a book</div>
+        <div className="capitalize text-2xl font-medium">Edit Book</div>
+        <div className="h-56 overflow-hidden ">
+          <img src={form.getValues().imageUrl} className="w-full h-full object-contain" />
+        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-4">
-            <Input
-              className=""
-              placeholder="Search by title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            {bookCoverResult.isFetching || bookCoverResult.isRefetching ? (
-              <div className="text-gray-500 flex flex-col items-center justify-center">
-                <div>Loading book cover...</div>
-                <LoadingSpinner className="m-auto mt-4" />
-              </div>
-            ) : bookCoverResult.data ? (
-              <div className="h-40 overflow-hidden border">
-                <img src={bookCoverResult.data.url} className="object-contain h-full w-full" />
-              </div>
-            ) : null}
-
             <FormField
               control={form.control}
               name="notes"
@@ -133,7 +116,7 @@ function CreateBook(props) {
                   <FormLabel>Your Rating</FormLabel>
                   <div className="relative">
                     <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <SelectTrigger className="">
                           <SelectValue placeholder="Select One" />
                         </SelectTrigger>
@@ -155,11 +138,7 @@ function CreateBook(props) {
                 </FormItem>
               )}
             />
-            <Button
-              variant="default"
-              disabled={bookCoverResult.isFetching || bookCoverResult.isRefetching}>
-              Submit
-            </Button>
+            <Button variant="default">Submit</Button>
           </form>
         </Form>
       </div>
@@ -167,4 +146,4 @@ function CreateBook(props) {
   );
 }
 
-export default CreateBook;
+export default EditBook;

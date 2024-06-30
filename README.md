@@ -20,4 +20,5 @@ Book cover api
 
 
 uses schema to generate client (generate new types) = `npx prisma generate`
-
+seeds database `npx prisma db seed`
+`npx prisma studio` view db
