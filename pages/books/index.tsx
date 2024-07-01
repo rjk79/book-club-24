@@ -136,13 +136,16 @@ function Home(props) {
   );
 
   const orderByOptions = [
-    { value: 'createdAt', label: 'Created At' },
+    { value: 'createdAt', label: 'Date Added' },
     { value: 'rating', label: 'Rating' }
   ];
 
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
       <div className="capitalize text-2xl font-medium">Your Books</div>
+      <div className="text-lg font-medium">
+        Total Results: {booksResult.data ? booksResult.data.books.length : null}
+      </div>
       <div className="flex gap-4 sticky top-0 bg-white items-center z-10 py-4 w-full">
         <Select onValueChange={setOrderBy}>
           <SelectTrigger className="w-40">
