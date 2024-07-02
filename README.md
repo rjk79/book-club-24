@@ -44,3 +44,5 @@ https://book-club-24.vercel.app/
 - uses schema to generate client (generates new types) `npx prisma generate`
 - seeds database `npx prisma db seed`
 - views db `npx prisma studio` 
+
+http://localhost:3000/api/auth/signin

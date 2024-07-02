@@ -1,6 +1,16 @@
 import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcrypt';
 const prisma = new PrismaClient();
 async function main() {
+  await prisma.user.deleteMany({});
+  await prisma.book.deleteMany({});
+  const password = await hash('test', 12);
+  const user = await prisma.user.create({
+    data: {
+      email: 'test@test.com',
+      password
+    }
+  });
   const book1 = await prisma.book.create({
     data: {
       imageUrl:

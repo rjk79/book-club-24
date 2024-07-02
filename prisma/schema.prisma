@@ -19,11 +19,12 @@ model Book {
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
 }
 
-// model User {
-//   id            String       @default(cuid()) @id
-//   name          String?
-//   email         String?   @unique
-//   createdAt     DateTime  @default(now()) @map(name: "created_at")
-//   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-//   @@map(name: "users")
-// }
+model User {
+  id            String       @default(cuid()) @id
+  name          String?
+  email         String   @unique
+  password      String  
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  @@map(name: "users")
+}
