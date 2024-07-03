@@ -142,7 +142,7 @@ function Home(props) {
 
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
-      <div className="capitalize text-2xl font-bold">Your Books</div>
+      <div className="capitalize text-2xl font-bold">All Books</div>
       <div className="text-md font-medium">
         Total Results: {booksResult.data ? booksResult.data.books.length : null}
       </div>

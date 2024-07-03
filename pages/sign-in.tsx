@@ -87,7 +87,7 @@ function SignIn(props) {
             <Button variant="default">Submit</Button>
           </form>
         </Form>
-        <Link href="/sign-up" className="hover:underline">
+        <Link href="/sign-up" className="hover:underline text-sm">
           Don{"'"}t have an account?
         </Link>
       </div>

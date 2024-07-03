@@ -46,3 +46,4 @@ https://book-club-24.vercel.app/
 - views db `npx prisma studio` 
 
 http://localhost:3000/api/auth/signin
+need to set `NEXTAUTH_SECRET` locally

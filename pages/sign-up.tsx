@@ -21,6 +21,7 @@ import {
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { toast } from '@/components/ui/use-toast';
 import { Star } from 'lucide-react';
+import Link from 'next/link';
 
 const FormSchema = z.object({
   email: z.string(),
@@ -53,7 +54,7 @@ function SignUp(props) {
   return (
     <div className="p-4 sm:p-10 flex flex-col gap-2 items-start">
       <div className="flex flex-col gap-4 sm:w-1/2 mx-auto">
-        <div className="capitalize text-2xl font-medium">Sign Up</div>
+        <div className="capitalize text-2xl font-medium">Register as New User</div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-4">
             <FormField
@@ -89,6 +90,9 @@ function SignUp(props) {
             <Button variant="default">Submit</Button>
           </form>
         </Form>
+        <Link href="/sign-in" className="hover:underline text-sm">
+          Already have an account?
+        </Link>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ export default async function handle(req, res) {
       const password = await hash(rawPassword, 12);
       const result = await prisma.user.create({
         data: {
-          email,
+          email: email.toLowerCase(),
           password
         }
       });
