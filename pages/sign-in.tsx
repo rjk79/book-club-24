@@ -81,6 +81,9 @@ function SignIn(props) {
                 </FormItem>
               )}
             />
+            {router?.query?.error === 'CredentialsSignin' ? (
+              <div className="text-red-500">Invalid credentials</div>
+            ) : null}
             <Button variant="default">Submit</Button>
           </form>
         </Form>
