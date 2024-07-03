@@ -47,3 +47,7 @@ https://book-club-24.vercel.app/
 
 http://localhost:3000/api/auth/signin
 need to set `NEXTAUTH_SECRET` locally
+
+![logo](public/screenshot-2.png?raw=true)
+
+![logo](public/screenshot-3.png?raw=true)
