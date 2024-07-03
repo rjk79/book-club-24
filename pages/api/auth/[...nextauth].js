@@ -18,6 +18,7 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials, req) {
+        console.log(credentials);
         if (!credentials?.username || !credentials.password) {
           return null;
         }
@@ -65,9 +66,9 @@ export const authOptions = {
       }
       return token;
     }
+  },
+  pages: {
+    signIn: '/sign-in'
   }
-  //   pages: {
-  //     signIn: 'auth/signIn' // need to implement
-  //   }
 };
 export default NextAuth(authOptions);

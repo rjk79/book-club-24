@@ -16,15 +16,21 @@ import { useMediaQuery } from '@mantine/hooks';
 import { UserCircle } from 'lucide-react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator
+} from '@/components/ui/dropdown-menu';
+import { useRouter } from 'next/router';
 
 export const HeaderMenu = () => {
   const isMobile = useMediaQuery('(max-width: 640px)');
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  console.log(session);
 
   return (
     <div className="shadow-lg relative h-12 bg-purple-300 w-full justify-center flex">
@@ -58,6 +64,31 @@ export const HeaderMenu = () => {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger className="top-2 h-8 w-8 hover:bg-purple-400 absolute right-2 font-medium flex justify-center items-center h-full text-sm hover:bg-accent rounded-sm ">
+          <UserCircle className="h-6 w-6" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {session?.user?.email ? (
+            <>
+              <DropdownMenuLabel>{session?.user?.email}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+            </>
+          ) : null}
+          {session?.user ? (
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => signOut({ redirect: true, callbackUrl: '/' })}>
+              Sign Out
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/sign-in')}>
+              Sign In
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

@@ -20,7 +20,7 @@ function Home(props) {
             <BookHeart size={48} />
           </div>
           <div className="font-medium text-white">Share Your Favorite Books</div>
-          <Button onClick={() => router.push('/books')} variant="default">
+          <Button onClick={() => router.push('/sign-in')} variant="default">
             Get Started
           </Button>
         </div>
