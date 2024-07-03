@@ -83,7 +83,7 @@ export const HeaderMenu = () => {
               Sign Out
             </DropdownMenuItem>
           ) : (
-            <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/sign-in')}>
+            <DropdownMenuItem className="cursor-pointer " onClick={() => router.push('/sign-in')}>
               Sign In
             </DropdownMenuItem>
           )}
