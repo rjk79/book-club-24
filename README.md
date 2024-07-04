@@ -45,6 +45,8 @@ https://book-club-24.vercel.app/
 - seeds database `npx prisma db seed`
 - views db `npx prisma studio` 
 
+`vercel dev`. remove # VERCEL="1"
+
 http://localhost:3000/api/auth/signin
 need to set `NEXTAUTH_SECRET` locally
 
