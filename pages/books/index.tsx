@@ -28,6 +28,17 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import pluralize from 'pluralize';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
 
 function Home(props) {
   const [orderBy, setOrderBy] = useState('createdAt');
@@ -110,9 +121,25 @@ function Home(props) {
               <Button variant="outline" onClick={() => router.push(`/book/${book.id}`)}>
                 Edit
               </Button>
-              <Button variant="outline" onClick={() => mutation.mutate(book.id)}>
-                Delete
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <Button variant="outline">Delete</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Book</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete this book?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => mutation.mutate(book.id)}>
+                      Confirm
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardContent>
           </div>
         </Card>
