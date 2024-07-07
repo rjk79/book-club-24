@@ -7,7 +7,7 @@ import { GetStaticProps } from 'next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { XIcon } from 'lucide-react';
+import { CircleHelp, InfoIcon, SparklesIcon, XIcon } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -39,11 +39,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useCompletion } from 'ai/react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 function Home(props) {
+  const { data: session } = useSession();
   const [orderBy, setOrderBy] = useState('createdAt');
-  const [filterBy, setFilterBy] = useState(null);
+  const [filterBy, setFilterBy] = useState('');
   const router = useRouter();
+  const { completion, input, handleInputChange, handleSubmit, complete } = useCompletion({
+    api: '/api/getRec'
+  });
 
   const booksResult = useQuery({
     queryKey: ['readBooks', orderBy, filterBy],
@@ -63,6 +70,18 @@ function Home(props) {
 
     return res.json();
   }
+
+  async function getRecommendations() {
+    const book1 = booksResult.data.books[0];
+    const book2 = booksResult.data.books[1];
+    const book3 = booksResult.data.books[2];
+    const fullSearchCriteria = `Give me a list of 3 book recommendations considering I gave these book reviews: '${book1.title}' ${book1.rating}/5, '${book2.title}' ${book2.rating}/5, '${book3.title}, ${book3.rating}/5.`;
+    const formatCriteria = `Please return this response as a numbered list with the book's title, followed by a colon, and then a brief description of the book. There should be a line of whitespace between each item in the list.`;
+    const searched = fullSearchCriteria + formatCriteria;
+
+    complete(searched);
+  }
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -166,6 +185,7 @@ function Home(props) {
     { value: 'createdAt', label: 'Date Added' },
     { value: 'rating', label: 'Rating' }
   ];
+  console.log(completion);
 
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
@@ -202,7 +222,33 @@ function Home(props) {
             ))}
           </SelectContent>
         </Select>
+        {(session?.user as any)?.id === 'cly4h6r9k0000es5qcxoa36fx' ? (
+          <div className="relative flex items-center">
+            <Button
+              variant="outline"
+              className="border-green-400 text-green-400 hover:text-green-400"
+              onClick={getRecommendations}>
+              Ask AI
+              <SparklesIcon className="h-4 w-4 ml-2" />
+            </Button>
+            <Popover>
+              <PopoverTrigger>
+                <CircleHelp className="ml-2 h-5 w-5 text-green-400" />
+              </PopoverTrigger>
+              <PopoverContent>
+                Ask AI for book suggestions based on your 3 most recently added books and their
+                ratings.
+              </PopoverContent>
+            </Popover>
+          </div>
+        ) : null}
       </div>
+      {completion ? (
+        <div className="p-4 border rounded-lg">
+          <div className="text-2xl font-medium text-green-400">AI Recommendations:</div>
+          <div className="whitespace-pre-line">{completion}</div>
+        </div>
+      ) : null}
       <div>{booksResult.data ? (booksResult.data.books.length ? books : zeroState) : loader}</div>
     </div>
   );

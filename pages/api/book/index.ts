@@ -3,9 +3,10 @@ import prisma from '../../../lib/prisma';
 export default async function handle(req, res) {
   if (req.method === 'POST') {
     try {
-      const { imageUrl, notes, rating } = req.body;
+      const { imageUrl, notes, rating, title } = req.body;
       const result = await prisma.book.create({
         data: {
+          title,
           imageUrl,
           notes,
           rating

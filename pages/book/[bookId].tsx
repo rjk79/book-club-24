@@ -33,7 +33,7 @@ import { Star } from 'lucide-react';
 const FormSchema = z.object({
   imageUrl: z.string().optional(),
   notes: z.string().max(50).optional(),
-  rating: z.string().optional()
+  rating: z.string()
 });
 
 function EditBook(props) {

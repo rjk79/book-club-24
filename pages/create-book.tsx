@@ -33,16 +33,14 @@ import { Star } from 'lucide-react';
 
 const FormSchema = z.object({
   notes: z.string().max(50).optional(),
-  rating: z.string().optional()
+  rating: z.string()
 });
 
 function CreateBook(props) {
   const [title, setTitle] = useState('');
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      rating: '3'
-    }
+    defaultValues: {}
   });
   const router = useRouter();
   const debouncedValue = useDebounce(title, 500);
@@ -73,6 +71,7 @@ function CreateBook(props) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        title,
         imageUrl: bookCoverResult.data.url,
         notes: data.notes,
         rating: parseInt(data.rating)
