@@ -19,7 +19,7 @@ function Home(props) {
             Bookworm.ai
             <BookHeart size={48} />
           </div>
-          <div className="font-medium text-white">Share Your Favorite Books</div>
+          <div className="font-medium text-white">Review and find books with AI</div>
           <Button onClick={() => router.push('/sign-in')} variant="default">
             Get Started
           </Button>

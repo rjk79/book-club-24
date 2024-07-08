@@ -3,13 +3,14 @@ import prisma from '../../../lib/prisma';
 export default async function handle(req, res) {
   if (req.method === 'POST') {
     try {
-      const { imageUrl, notes, rating, title } = req.body;
+      const { userId, imageUrl, notes, rating, title } = req.body;
       const result = await prisma.book.create({
         data: {
           title,
           imageUrl,
           notes,
-          rating
+          rating,
+          user: { connect: { id: userId } }
         }
       });
 

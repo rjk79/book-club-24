@@ -45,7 +45,8 @@ https://book-club-24.vercel.app/
 - seeds database `npx prisma db seed`
 - views db `npx prisma studio` 
 
-reset, push
+reset, push `npx prisma migrate reset` `npx prisma db push`
+if new fields are not being returned, reinstall node_modules
 
 `vercel dev`. remove # VERCEL="1"
 

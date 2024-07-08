@@ -30,6 +30,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { PencilIcon } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Star } from 'lucide-react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const FormSchema = z.object({
   notes: z.string().max(50).optional(),
@@ -37,6 +38,8 @@ const FormSchema = z.object({
 });
 
 function CreateBook(props) {
+  const { data: session } = useSession();
+
   const [title, setTitle] = useState('');
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -74,7 +77,8 @@ function CreateBook(props) {
         title,
         imageUrl: bookCoverResult.data.url,
         notes: data.notes,
-        rating: parseInt(data.rating)
+        rating: parseInt(data.rating),
+        userId: (session?.user as any).id
       })
     });
 

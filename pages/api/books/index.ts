@@ -2,21 +2,31 @@ import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
   try {
-    const { orderBy, filterBy } = req.query;
+    const { orderBy, filterBy, userId } = req.query;
+    console.log(userId);
     const options: any = {
       orderBy: [
         {
           [orderBy]: 'desc'
         }
-      ]
+      ],
+      where: {
+        AND: [
+          {
+            userId: {
+              equals: userId
+            }
+          }
+        ]
+      }
     };
 
     if (filterBy) {
-      options.where = {
+      options.where.AND.push({
         rating: {
           equals: parseInt(filterBy)
         }
-      };
+      });
     }
     const books = await prisma.book.findMany(options);
 

@@ -5,9 +5,15 @@ async function main() {
   await prisma.user.deleteMany({});
   await prisma.book.deleteMany({});
   const password = await hash('test', 12);
-  const user = await prisma.user.create({
+  const user1 = await prisma.user.create({
     data: {
       email: 'test@test.com',
+      password
+    }
+  });
+  const user2 = await prisma.user.create({
+    data: {
+      email: 'test2@test.com',
       password
     }
   });
@@ -16,7 +22,8 @@ async function main() {
       title: 'Shrek',
       imageUrl:
         'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1328867503i/1160788.jpg',
-      rating: 4
+      rating: 4,
+      user: { connect: { id: user2.id } }
     }
   });
   const book2 = await prisma.book.create({
@@ -24,7 +31,8 @@ async function main() {
       title: 'Disney',
       imageUrl:
         'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1629291053i/58800757.jpg',
-      rating: 3
+      rating: 3,
+      user: { connect: { id: user1.id } }
     }
   });
   const book3 = await prisma.book.create({
@@ -32,7 +40,8 @@ async function main() {
       title: 'Lady Gaga',
       imageUrl:
         'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1660404888i/60182574.jpg',
-      rating: 3
+      rating: 3,
+      user: { connect: { id: user1.id } }
     }
   });
   const book4 = await prisma.book.create({
@@ -40,7 +49,8 @@ async function main() {
       title: 'Taylor Swift',
       imageUrl:
         'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1696821726i/199325582.jpg',
-      rating: 3
+      rating: 3,
+      user: { connect: { id: user1.id } }
     }
   });
   const book5 = await prisma.book.create({
@@ -48,7 +58,8 @@ async function main() {
       title: 'Life of Pi',
       imageUrl:
         'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1631251689i/4214.jpg',
-      rating: 3
+      rating: 3,
+      user: { connect: { id: user1.id } }
     }
   });
 }
