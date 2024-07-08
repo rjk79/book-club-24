@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 
 export default function Layout({ children }: { children: any }) {
   useEffect(() => {
-    document.title = 'Book Club';
+    document.title = 'Bookworm.ai';
   }, []);
   return (
     <>

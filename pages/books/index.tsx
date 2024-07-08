@@ -189,7 +189,29 @@ function Home(props) {
 
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
-      <div className="capitalize text-2xl font-bold">All Books</div>
+      <div className="flex gap-2 sm:flex-row flex-col-reverse justify-between w-full">
+        <div className="capitalize text-2xl font-bold">All Books</div>
+        {(session?.user as any)?.id === 'cly4h6r9k0000es5qcxoa36fx' ? (
+          <div className="relative flex items-center">
+            <Button
+              variant="outline"
+              className="bg-green-400 bg-gradient-to-r from-fuchsia-500 to-violet-500 hover:bg-green-500 text-white hover:text-white"
+              onClick={getRecommendations}>
+              Get AI Recommendations
+              <SparklesIcon className="h-4 w-4 ml-2" />
+            </Button>
+            <Popover>
+              <PopoverTrigger>
+                <CircleHelp className="ml-2 h-5 w-5 text-violet-500" />
+              </PopoverTrigger>
+              <PopoverContent>
+                Ask AI for book suggestions based on your 3 most recently added books and their
+                ratings.
+              </PopoverContent>
+            </Popover>
+          </div>
+        ) : null}
+      </div>
       <div className="text-md font-medium">
         Total Results: {booksResult.data ? booksResult.data.books.length : null}
       </div>
@@ -222,30 +244,10 @@ function Home(props) {
             ))}
           </SelectContent>
         </Select>
-        {(session?.user as any)?.id === 'cly4h6r9k0000es5qcxoa36fx' ? (
-          <div className="relative flex items-center">
-            <Button
-              variant="outline"
-              className="border-green-400 text-green-400 hover:text-green-400"
-              onClick={getRecommendations}>
-              Ask AI
-              <SparklesIcon className="h-4 w-4 ml-2" />
-            </Button>
-            <Popover>
-              <PopoverTrigger>
-                <CircleHelp className="ml-2 h-5 w-5 text-green-400" />
-              </PopoverTrigger>
-              <PopoverContent>
-                Ask AI for book suggestions based on your 3 most recently added books and their
-                ratings.
-              </PopoverContent>
-            </Popover>
-          </div>
-        ) : null}
       </div>
       {completion ? (
         <div className="p-4 border rounded-lg">
-          <div className="text-2xl font-medium text-green-400">AI Recommendations:</div>
+          <div className="text-2xl font-medium text-violet-500">AI Recommendations:</div>
           <div className="whitespace-pre-line">{completion}</div>
         </div>
       ) : null}

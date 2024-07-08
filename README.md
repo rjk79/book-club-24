@@ -1,8 +1,8 @@
 ![logo](public/screenshot.png?raw=true)
-# Book Club
+# Bookworm.ai
 
 ## Overview
-Book Club is a platform for sharing books that you've read and enjoyed.
+Bookworm.ai is a platform for sharing books that you've read and enjoyed.
 
 ## Live Site:
 https://book-club-24.vercel.app/
