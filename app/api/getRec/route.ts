@@ -15,9 +15,8 @@ const openai = createOpenAI({
 const ratelimit = new Ratelimit({
   redis: kv,
   // 5 requests from the same userId in 10 seconds
-  limiter: Ratelimit.slidingWindow(1, '10 s')
+  limiter: Ratelimit.slidingWindow(5, '1 d')
 });
-// const { success, pending, limit, reset, remaining } = await ratelimit.limit(userId);
 
 async function generatePrompts(searched) {
   const result = await streamText({
@@ -35,17 +34,18 @@ async function generatePrompts(searched) {
 
 export async function POST(request: Request) {
   const res = await request.json();
-  console.log('RES', res);
-  const { prompt } = res;
+  const { prompt, userId } = res;
   try {
+    const { success, pending, limit, reset, remaining } = await ratelimit.limit(userId);
+    console.log('REMAINING', remaining);
     // const ip = request.ip ?? '127.0.0.1';
 
-    // if (success) {
-    return generatePrompts(prompt);
-
-    // res.json({ result: 'hi' });
-  } catch {
-    // res.send('There was an error');
+    if (success) {
+      return generatePrompts(prompt);
+    }
+    throw Error('Too many requests');
+  } catch (e) {
+    return Response.json({ response: e.message });
   }
 }
 

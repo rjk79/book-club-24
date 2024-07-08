@@ -43,13 +43,17 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useCompletion } from 'ai/react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
+const MINIMUM_BOOKS = 3;
+
 function Home(props) {
   const { data: session } = useSession();
   const [orderBy, setOrderBy] = useState('createdAt');
   const [filterBy, setFilterBy] = useState('');
+  const [aiApiError, setAiApiError] = useState('');
   const router = useRouter();
   const { completion, input, handleInputChange, handleSubmit, complete } = useCompletion({
-    api: '/api/getRec'
+    api: '/api/getRec',
+    onError: (e) => setAiApiError('Error while fetching AI data. Please try again later.')
   });
 
   const booksResult = useQuery({
@@ -73,14 +77,22 @@ function Home(props) {
   }
 
   async function getRecommendations() {
-    const book1 = booksResult.data.books[0];
-    const book2 = booksResult.data.books[1];
-    const book3 = booksResult.data.books[2];
-    const fullSearchCriteria = `Give me a list of 3 book recommendations considering I gave these book reviews: '${book1.title}' ${book1.rating}/5, '${book2.title}' ${book2.rating}/5, '${book3.title}, ${book3.rating}/5.`;
-    const formatCriteria = `Please return this response as a numbered list with the book's title, followed by a colon, and then a brief description of the book. There should be a line of whitespace between each item in the list.`;
-    const searched = fullSearchCriteria + formatCriteria;
+    if (booksResult.data?.books?.length < MINIMUM_BOOKS) {
+      setAiApiError(`Please add at least ${MINIMUM_BOOKS} books first.`);
+    } else if (booksResult.data?.books?.length >= MINIMUM_BOOKS) {
+      const book1 = booksResult.data.books[0];
+      const book2 = booksResult.data.books[1];
+      const book3 = booksResult.data.books[2];
+      const fullSearchCriteria = `Give me a list of 3 book recommendations considering I gave these book reviews: '${book1.title}' ${book1.rating}/5, '${book2.title}' ${book2.rating}/5, '${book3.title}, ${book3.rating}/5.`;
+      const formatCriteria = `Please return this response as a numbered list with the book's title, followed by a colon, and then a brief description of the book. There should be a line of whitespace between each item in the list.`;
+      const searched = fullSearchCriteria + formatCriteria;
 
-    complete(searched);
+      complete(searched, {
+        body: {
+          userId: (session?.user as any).id
+        }
+      });
+    }
   }
 
   const queryClient = useQueryClient();
@@ -171,7 +183,7 @@ function Home(props) {
     <div className="flex gap-2">
       <div>No books added.</div>
       <Link href={'/create-book'} className="underline">
-        Add a book!
+        Add a book {'>>>'}
       </Link>
     </div>
   );
@@ -192,26 +204,28 @@ function Home(props) {
     <div className="p-10 flex flex-col gap-2 items-start">
       <div className="flex gap-2 sm:flex-row flex-col-reverse justify-between w-full">
         <div className="capitalize text-2xl font-bold">All Books</div>
-        <div className="relative flex items-center">
-          <Button
-            variant="outline"
-            className="bg-green-400 bg-gradient-to-r from-fuchsia-500 to-violet-500 hover:bg-green-500 text-white hover:text-white"
-            onClick={getRecommendations}>
-            Get AI Recommendations
-            <SparklesIcon className="h-4 w-4 ml-2" />
-          </Button>
-          <Popover>
-            <PopoverTrigger>
-              <CircleHelp className="ml-2 h-5 w-5 text-violet-500" />
-            </PopoverTrigger>
-            <PopoverContent>
-              Ask AI for book suggestions based on your 3 most recently added books and their
-              ratings.
-            </PopoverContent>
-          </Popover>
-        </div>
+        {booksResult.data?.books ? (
+          <div className="relative flex items-center">
+            <Button
+              variant="outline"
+              className="bg-green-400 bg-gradient-to-r from-fuchsia-500 to-violet-500 hover:bg-green-500 text-white hover:text-white"
+              onClick={getRecommendations}>
+              Get AI Recommendations
+              <SparklesIcon className="h-4 w-4 ml-2" />
+            </Button>
+            <Popover>
+              <PopoverTrigger>
+                <CircleHelp className="ml-2 h-5 w-5 text-violet-500" />
+              </PopoverTrigger>
+              <PopoverContent>
+                Ask AI for book suggestions based on your 3 most recent book ratings. Please note
+                that requests for AI suggestions are rate-limited.
+              </PopoverContent>
+            </Popover>
+          </div>
+        ) : null}
       </div>
-      <div className="text-md font-medium">
+      <div className="text-md">
         Total Results: {booksResult.data ? booksResult.data.books.length : null}
       </div>
       <div className="flex gap-4 sticky top-0 bg-white items-center z-10 py-4 w-full">
@@ -245,10 +259,14 @@ function Home(props) {
         </Select>
       </div>
       {completion ? (
-        <div className="p-4 border rounded-lg">
-          <div className="text-2xl font-medium text-violet-500">AI Recommendations:</div>
+        <div className="p-4 border-2 rounded-lg border-fuchsia-500">
+          <div className="text-2xl font-medium bg-gradient-to-r from-fuchsia-500 to-violet-500 text-transparent bg-clip-text">
+            AI Recommendations:
+          </div>
           <div className="whitespace-pre-line">{completion}</div>
         </div>
+      ) : aiApiError ? (
+        <div className="text-red-500">{aiApiError}</div>
       ) : null}
       <div>{booksResult.data ? (booksResult.data.books.length ? books : zeroState) : loader}</div>
     </div>
