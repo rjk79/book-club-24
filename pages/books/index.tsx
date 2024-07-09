@@ -156,25 +156,27 @@ function Home(props) {
               <Button variant="outline" onClick={() => router.push(`/book/${book.id}`)}>
                 Edit
               </Button>
-              <AlertDialog>
-                <AlertDialogTrigger>
-                  <Button variant="outline">Delete</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Book</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to delete this book?
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => mutation.mutate(book.id)}>
-                      Confirm
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              {session?.user?.email === 'test@test.com' ? null : (
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button variant="outline">Delete</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Book</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this book?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => mutation.mutate(book.id)}>
+                        Confirm
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
             </CardContent>
           </div>
         </Card>
