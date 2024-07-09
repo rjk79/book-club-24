@@ -53,7 +53,10 @@ function Home(props) {
   const router = useRouter();
   const { completion, input, handleInputChange, handleSubmit, complete } = useCompletion({
     api: '/api/getRec',
-    onError: (e) => setAiApiError('Error while fetching AI data. Please try again later.')
+    onError: (e) =>
+      setAiApiError(
+        'Error while fetching AI data. You might be rate-limited. Please try again later.'
+      )
   });
 
   const booksResult = useQuery({

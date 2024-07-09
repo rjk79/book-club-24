@@ -15,7 +15,7 @@ const openai = createOpenAI({
 const ratelimit = new Ratelimit({
   redis: kv,
   // 5 requests from the same userId in 10 seconds
-  limiter: Ratelimit.slidingWindow(5, '1 d')
+  limiter: Ratelimit.slidingWindow(6, '1 d')
 });
 
 async function generatePrompts(searched) {
