@@ -63,7 +63,7 @@ function EditBook(props) {
     });
 
     toast({
-      title: 'Book added successfully'
+      title: 'Book edited successfully'
     });
 
     router.push('/books');
