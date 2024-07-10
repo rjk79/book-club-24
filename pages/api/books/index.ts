@@ -3,7 +3,6 @@ import prisma from '../../../lib/prisma';
 export default async function handle(req, res) {
   try {
     const { orderBy, filterBy, userId } = req.query;
-    console.log(userId);
     const options: any = {
       orderBy: [
         {

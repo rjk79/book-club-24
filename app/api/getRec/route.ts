@@ -6,6 +6,7 @@ import { OpenAI } from 'openai';
 import { PassThrough } from 'stream';
 import { OpenAIStream, StreamingTextResponse, streamText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
+import { NextRequest } from 'next/server';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const openai = createOpenAI({
@@ -32,13 +33,15 @@ async function generatePrompts(searched) {
   return new StreamingTextResponse(result.toAIStream());
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const res = await request.json();
-  const { prompt, userId } = res;
+  const { prompt } = res;
+
+  const searchParams = request.nextUrl.searchParams;
+  const clientIp = searchParams.get('clientIp') ?? '127.0.0.1';
+
   try {
-    const { success, pending, limit, reset, remaining } = await ratelimit.limit(userId);
-    console.log('REMAINING', remaining);
-    // const ip = request.ip ?? '127.0.0.1';
+    const { success, pending, limit, reset, remaining } = await ratelimit.limit(clientIp);
 
     if (success) {
       return generatePrompts(prompt);
@@ -48,5 +51,3 @@ export async function POST(request: Request) {
     return Response.json({ response: e.message });
   }
 }
-
-////////////
