@@ -90,11 +90,7 @@ function Home(props) {
       const formatCriteria = `Please return this response as a numbered list with the book's title, followed by a colon, and then a brief description of the book. There should be a line of whitespace between each item in the list.`;
       const searched = fullSearchCriteria + formatCriteria;
 
-      complete(searched, {
-        body: {
-          userId: (session?.user as any).id
-        }
-      });
+      complete(searched);
     }
   }
 
@@ -203,7 +199,6 @@ function Home(props) {
     { value: 'createdAt', label: 'Date Added' },
     { value: 'rating', label: 'Rating' }
   ];
-  console.log(completion);
 
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
