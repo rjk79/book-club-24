@@ -203,13 +203,16 @@ function Home(props) {
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
       <div className="flex gap-2 sm:flex-row flex-col-reverse justify-between w-full">
-        <div className="capitalize text-2xl font-bold">All Books</div>
         {booksResult.data?.books ? (
           <div className="relative flex items-center">
             <Button
               variant="outline"
-              className="bg-green-400 bg-gradient-to-r from-fuchsia-500 to-violet-500 hover:bg-green-500 text-white hover:text-white"
-              onClick={getRecommendations}>
+              className={classNames(
+                'bg-green-400 bg-gradient-to-r from-fuchsia-500 to-violet-500 hover:bg-green-500 text-white hover:text-white',
+                {}
+              )}
+              onClick={getRecommendations}
+              disabled={!!completion}>
               Get AI Recommendations
               <SparklesIcon className="h-4 w-4 ml-2" />
             </Button>
@@ -225,39 +228,6 @@ function Home(props) {
           </div>
         ) : null}
       </div>
-      <div className="text-md">
-        Total Results: {booksResult.data ? booksResult.data.books.length : null}
-      </div>
-      <div className="flex gap-4 sticky top-0 bg-white items-center z-10 py-4 w-full">
-        <Select onValueChange={setOrderBy}>
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Sort" />
-          </SelectTrigger>
-          <SelectContent className="">
-            {orderByOptions.map((option: any, index: number) => (
-              <SelectItem key={index} value={option.value} className="capitalize">
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select onValueChange={setFilterBy}>
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Filter" />
-          </SelectTrigger>
-          <SelectContent className="">
-            {[1, 2, 3, 4, 5].map((value: any, index: number) => (
-              <SelectItem key={index} value={value.toString()} className="capitalize">
-                <div className="flex">
-                  {Array.from({ length: value }, () => (
-                    <Star fill="gold" strokeWidth={0} />
-                  ))}
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
       {completion ? (
         <div className="p-4 border-2 rounded-lg border-fuchsia-500">
           <div className="text-2xl font-medium bg-gradient-to-r from-fuchsia-500 to-violet-500 text-transparent bg-clip-text">
@@ -268,6 +238,43 @@ function Home(props) {
       ) : aiApiError ? (
         <div className="text-red-500">{aiApiError}</div>
       ) : null}
+      <div className="capitalize text-2xl font-bold">All Books</div>
+
+      <div className="items-start flex flex-col gap-4 sticky top-0 bg-white z-10 py-4 w-full">
+        <div className="flex gap-4 w-full items-center ">
+          <Select onValueChange={setOrderBy}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Sort" />
+            </SelectTrigger>
+            <SelectContent className="">
+              {orderByOptions.map((option: any, index: number) => (
+                <SelectItem key={index} value={option.value} className="capitalize">
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select onValueChange={setFilterBy}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Filter" />
+            </SelectTrigger>
+            <SelectContent className="">
+              {[1, 2, 3, 4, 5].map((value: any, index: number) => (
+                <SelectItem key={index} value={value.toString()} className="capitalize">
+                  <div className="flex">
+                    {Array.from({ length: value }, () => (
+                      <Star fill="gold" strokeWidth={0} />
+                    ))}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="text-sm">
+          Total Results: {booksResult.data ? booksResult.data.books.length : null}
+        </div>
+      </div>
       <div>{booksResult.data ? (booksResult.data.books.length ? books : zeroState) : loader}</div>
     </div>
   );
