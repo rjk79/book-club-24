@@ -51,13 +51,15 @@ function Home(props) {
   const [filterBy, setFilterBy] = useState('');
   const [aiApiError, setAiApiError] = useState('');
   const router = useRouter();
-  const { completion, input, handleInputChange, handleSubmit, complete } = useCompletion({
-    api: '/api/getRec',
-    onError: (e) =>
-      setAiApiError(
-        'Error while fetching AI data. You might be rate-limited. Please try again later.'
-      )
-  });
+  const { completion, input, handleInputChange, handleSubmit, complete, isLoading } = useCompletion(
+    {
+      api: '/api/getRec',
+      onError: (e) =>
+        setAiApiError(
+          'Error while fetching AI data. You might be rate-limited. Please try again later.'
+        )
+    }
+  );
 
   const booksResult = useQuery({
     queryKey: ['readBooks', orderBy, filterBy],
@@ -200,6 +202,15 @@ function Home(props) {
     { value: 'rating', label: 'Rating' }
   ];
 
+  const completionText = (
+    <div className="p-4 border-2 rounded-lg border-fuchsia-500">
+      <div className="text-2xl font-medium bg-gradient-to-r from-fuchsia-500 to-violet-500 text-transparent bg-clip-text">
+        AI Recommendations:
+      </div>
+      <div className="whitespace-pre-line">{completion}</div>
+    </div>
+  );
+
   return (
     <div className="p-10 flex flex-col gap-2 items-start">
       <div className="flex gap-2 sm:flex-row flex-col-reverse justify-between w-full">
@@ -229,12 +240,9 @@ function Home(props) {
         ) : null}
       </div>
       {completion ? (
-        <div className="p-4 border-2 rounded-lg border-fuchsia-500">
-          <div className="text-2xl font-medium bg-gradient-to-r from-fuchsia-500 to-violet-500 text-transparent bg-clip-text">
-            AI Recommendations:
-          </div>
-          <div className="whitespace-pre-line">{completion}</div>
-        </div>
+        completionText
+      ) : isLoading ? (
+        <LoadingSpinner />
       ) : aiApiError ? (
         <div className="text-red-500">{aiApiError}</div>
       ) : null}

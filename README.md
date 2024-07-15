@@ -52,7 +52,8 @@ Since the Next.js pages router does not allow streaming responses, the app route
 
 ## Project Setup:
 - installs dependencies `yarn`
-- runs server `yarn dev`
+- get secrets `vercel env pull .env`
+- runs server `vercel dev`. remove # VERCEL="1" first
 
 - checks types `yarn build`
 - fixes code formatting `yarn lint:fix`
@@ -65,7 +66,6 @@ Since the Next.js pages router does not allow streaming responses, the app route
 reset, push `npx prisma migrate reset` `npx prisma db push`
 if new fields are not being returned, reinstall node_modules
 
-`vercel dev`. remove # VERCEL="1"
 
 http://localhost:3000/api/auth/signin
 need to set `NEXTAUTH_SECRET` locally
